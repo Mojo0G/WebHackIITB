@@ -7,8 +7,18 @@ export default defineConfig({
   server: {
     host: true, // Needed for Docker mapping
     port: 3000, 
+    allowedHosts: [
+      'cosmic-watch-frontend.onrender.com'
+    ],
     watch: {
       usePolling: true // Needed for Docker hot-reload on Windows/Mac
     }
+  },
+  preview: {
+    host: true,
+    port: 3000,
+    allowedHosts: [
+      'cosmic-watch-frontend.onrender.com'
+    ]
   }
 })
