@@ -86,11 +86,11 @@ const ChatSidebar = ({ asteroidId }) => {
 
     console.log('📤 Sending message:', messageData);
     
-    // Emit to server
-    socket.emit('send_message', messageData);
-    
-    // Add to local state immediately
+    // Add to local state immediately only for the sender
     setMessages((prev) => [...prev, messageData]);
+    
+    // Emit to server (server broadcasts to others only)
+    socket.emit('send_message', messageData);
     setNewMessage('');
   };
 

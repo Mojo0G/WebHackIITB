@@ -127,8 +127,8 @@ io.on('connection', (socket) => {
   socket.on('send_message', (messageData) => {
     console.log(`📨 Message from ${socket.id} in room ${messageData.room}:`, messageData.message);
     
-    // Broadcast to all users in that asteroid's room
-    io.to(messageData.room).emit('receive_message', {
+    // Broadcast ONLY to other users in that asteroid's room (not back to sender)
+    socket.broadcast.to(messageData.room).emit('receive_message', {
       ...messageData,
       senderId: socket.id,
       timestamp: new Date().toISOString()
