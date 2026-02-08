@@ -4,9 +4,10 @@ const WatchedAsteroid = require('../models/WatchedAsteroid');
 
 exports.getFeed = async (req, res) => {
   try {
+    console.log('📡 getFeed: Fetching asteroid data...');
     const rawAsteroids = await nasaService.fetchAsteroidFeed();
+    console.log(`📡 getFeed: Retrieved ${rawAsteroids.length} asteroids from service`);
     
-
     const enrichedAsteroids = rawAsteroids.map(asteroid => {
       const riskScore = riskService.calculateRiskScore(asteroid);
       return {
@@ -16,10 +17,12 @@ exports.getFeed = async (req, res) => {
       };
     });
 
+    console.log(`✅ getFeed: Sending ${enrichedAsteroids.length} enriched asteroids to frontend`);
     res.json(enrichedAsteroids);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Failed to fetch asteroid feed' });
+    console.error('❌ getFeed: Error occurred:', error.message);
+    console.error('Stack:', error.stack);
+    res.status(500).json({ message: 'Failed to fetch asteroid feed', error: error.message });
   }
 };
 

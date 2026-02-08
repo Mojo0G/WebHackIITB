@@ -1,6 +1,5 @@
 import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
-import API_BASE_URL from '../api.config';
+import API_BASE_URL, { axiosInstance } from '../api.config';
 
 export const AuthContext = createContext();
 
@@ -11,17 +10,19 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${token}`;
       localStorage.setItem('token', token);
+      console.log('🔐 Authorization token set');
     } else {
-      delete axios.defaults.headers.common['Authorization'];
+      delete axiosInstance.defaults.headers.common['Authorization'];
       localStorage.removeItem('token');
+      console.log('🔓 Authorization token removed');
     }
   }, [token]);
 
   // LOGIN FUNCTION
   const login = async (email, password) => {
-    const res = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password });
+    const res = await axiosInstance.post('/api/auth/login', { email, password });
     setToken(res.data.token);
     setUser(res.data);
     return res.data;
@@ -29,7 +30,7 @@ export const AuthProvider = ({ children }) => {
 
   // REGISTER FUNCTION (New!)
   const register = async (name, email, password) => {
-    const res = await axios.post(`${API_BASE_URL}/api/auth/register`, { 
+    const res = await axiosInstance.post('/api/auth/register', { 
       name, 
       email, 
       password 

@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { AuthContext } from './context/AuthContext';
-import API_BASE_URL from './api.config';
+import API_BASE_URL, { axiosInstance } from './api.config';
 import { ArrowLeft, Activity, Ruler, Globe2, Crosshair, AlertTriangle } from 'lucide-react';
 import EarthOrbit from './components/EarthOrbit';
 import ChatSidebar from './components/ChatSidebar';
@@ -17,7 +16,7 @@ const AsteroidDetail = () => {
   useEffect(() => {
     const fetchDetail = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/asteroids/feed`);
+        const res = await axiosInstance.get('/api/asteroids/feed');
         const found = res.data.find(a => a.id === id);
         setAsteroid(found);
         setLoading(false);
@@ -31,7 +30,7 @@ const AsteroidDetail = () => {
   const handleWatch = async () => {
     if (!token) { navigate('/login'); return; }
     try {
-      await axios.post(`${API_BASE_URL}/api/asteroids/watch`, {
+      await axiosInstance.post('/api/asteroids/watch', {
         asteroidId: asteroid.id,
         asteroidName: asteroid.name,
         alertThreshold: 5000000 

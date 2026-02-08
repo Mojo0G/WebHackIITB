@@ -13,17 +13,44 @@ const { startSentinel } = require('./services/sentinelService');
 const app = express();
 const server = http.createServer(app);
 
+// CORS Configuration
+const corsOptions = {
+  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+};
+
 // Socket.io Setup
 const io = new Server(server, {
-  cors: {
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
-    methods: ["GET", "POST"]
-  }
+  cors: corsOptions
 });
 
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
+
+// Request & Response Logging Middleware
+app.use((req, res, next) => {
+  const startTime = new Date();
+  console.log(`📍 [${startTime.toISOString()}] ${req.method} ${req.path}`);
+  if (req.body && Object.keys(req.body).length > 0) {
+    console.log(`   Body:`, req.body);
+  }
+  
+  // Capture response
+  const originalSend = res.send;
+  res.send = function(data) {
+    const duration = new Date() - startTime;
+    console.log(`📤 Response: ${res.statusCode} (${duration}ms)`);
+    if (typeof data === 'string' && data.length < 500) {
+      console.log(`   Data: ${data.substring(0, 200)}`);
+    }
+    return originalSend.call(this, data);
+  };
+  
+  next();
+});
 
 // Health Check Endpoint
 app.get('/api/health', (req, res) => {

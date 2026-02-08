@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
 import { AuthContext } from './context/AuthContext';
-import API_BASE_URL from './api.config';
+import API_BASE_URL, { axiosInstance } from './api.config';
 import { User, Shield, Activity, Trash2, Radar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,7 +14,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchWatchlist = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/asteroids/watchlist`);
+        const res = await axiosInstance.get('/api/asteroids/watchlist');
         setWatchlist(res.data);
         setLoading(false);
       } catch (err) {

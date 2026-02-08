@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import axios from 'axios';
 import AsteroidCard from './components/AsteroidCard';
-import API_BASE_URL from './api.config';
+import API_BASE_URL, { axiosInstance } from './api.config';
 import { SlidersHorizontal, Radar, AlertTriangle, X, Check } from 'lucide-react';
 
 // TODO: Add asteroid images to public/assets folder
@@ -34,14 +33,27 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${API_BASE_URL}/api/asteroids/feed`);
+        console.log('🌍 Frontend API Configuration:');
+        console.log('  API_BASE_URL:', API_BASE_URL);
+        console.log('  Full URL:', `${API_BASE_URL}/api/asteroids/feed`);
+        console.log('  Attempting to fetch asteroid data...');
+        
+        const res = await axiosInstance.get('/api/asteroids/feed');
         console.log('✅ Asteroids fetched:', res.data.length, 'asteroids');
         console.log('Sample asteroid:', res.data[0]);
         setAsteroids(res.data);
         setLoading(false);
       } catch (err) {
-        console.error('❌ API Error:', err.message);
-        console.error('Response:', err.response?.data);
+        console.error('❌ API Error Details:');
+        console.error('  Error Message:', err.message);
+        console.error('  Error Code:', err.code);
+        console.error('  Status Code:', err.response?.status);
+        console.error('  Status Text:', err.response?.statusText);
+        console.error('  Response Data:', err.response?.data);
+        console.error('  Response Headers:', err.response?.headers);
+        console.error('  Request URL:', err.config?.url);
+        console.error('  Full Error:', err);
+        
         setError('Unable to establish Deep Space Network uplink. Switching to local cache.');
         setLoading(false);
       }
