@@ -35,9 +35,13 @@ const Dashboard = () => {
     const fetchData = async () => {
       try {
         const res = await axios.get(`${API_BASE_URL}/api/asteroids/feed`);
+        console.log('✅ Asteroids fetched:', res.data.length, 'asteroids');
+        console.log('Sample asteroid:', res.data[0]);
         setAsteroids(res.data);
         setLoading(false);
       } catch (err) {
+        console.error('❌ API Error:', err.message);
+        console.error('Response:', err.response?.data);
         setError('Unable to establish Deep Space Network uplink. Switching to local cache.');
         setLoading(false);
       }
@@ -51,9 +55,11 @@ const Dashboard = () => {
     if (category === 'CRITICAL' && ast.riskScore < 80) return false;
     if (category === 'HAZARDOUS' && (ast.riskScore < 50 || ast.riskScore >= 80)) return false;
 
-    // 2. Diameter Check
-    // Calculate average diameter in meters
-    const avgDiameter = (ast.estimated_diameter.meters.estimated_diameter_min + ast.estimated_diameter.meters.estimated_diameter_max) / 2;
+    // 2. Diameter Check (safely handle missing data)
+    let avgDiameter = 0;
+    if (ast.estimated_diameter?.meters?.estimated_diameter_min && ast.estimated_diameter?.meters?.estimated_diameter_max) {
+      avgDiameter = (ast.estimated_diameter.meters.estimated_diameter_min + ast.estimated_diameter.meters.estimated_diameter_max) / 2;
+    }
     if (avgDiameter < filters.minDia || avgDiameter > filters.maxDia) return false;
 
     // 3. Risk Score Check
@@ -173,6 +179,23 @@ const Dashboard = () => {
              <div className="absolute inset-0 w-24 h-24 border-r-4 border-l-4 border-neon-magenta rounded-full animate-spin-slow opacity-50"></div>
            </div>
            <p className="text-neon-cyan font-rajdhani text-xl tracking-[0.2em] animate-pulse">CALIBRATING SENSORS...</p>
+        </div>
+      ) : error ? (
+        <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-hazard-critical/50 rounded-3xl bg-hazard-critical/5">
+          <AlertTriangle size={48} className="text-hazard-critical mb-4" />
+          <div className="text-hazard-critical font-rajdhani text-xl">{error}</div>
+          <p className="text-gray-400 text-sm mt-2">Please check:</p>
+          <ul className="text-gray-400 text-xs mt-1 space-y-1">
+            <li>• NASA_API_KEY environment variable is set in Render</li>
+            <li>• Backend service is running</li>
+            <li>• Network connection is working</li>
+          </ul>
+        </div>
+      ) : asteroids.length === 0 ? (
+        <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-white/10 rounded-3xl bg-white/5">
+          <Radar size={48} className="text-gray-600 mb-4" />
+          <div className="text-gray-400 font-rajdhani text-xl">NO ASTEROID DATA RECEIVED</div>
+          <p className="text-gray-400 text-sm mt-2">Ensure NASA API key is configured on the backend</p>
         </div>
       ) : filteredAsteroids.length === 0 ? (
         <div className="flex flex-col items-center justify-center h-64 border-2 border-dashed border-white/10 rounded-3xl bg-white/5">
