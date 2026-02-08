@@ -16,7 +16,7 @@ const Navbar = () => {
             <Satellite className="relative text-neon-cyan group-hover:rotate-12 transition duration-500" size={28} />
           </div>
           <h1 className="font-rajdhani font-bold text-2xl tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white to-neon-cyan">
-            COSMIC WATCH
+            COSMIC LENS
           </h1>
         </Link>
 
@@ -50,5 +50,6 @@ const Navbar = () => {
     </nav>
   );
 };
+
 
 export default Navbar;
