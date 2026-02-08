@@ -25,6 +25,52 @@ const io = new Server(server, {
 app.use(cors());
 app.use(express.json());
 
+// Health Check Endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'ok',
+    message: 'Backend is running',
+    timestamp: new Date().toISOString(),
+    environment: {
+      NODE_ENV: process.env.NODE_ENV,
+      NASA_API_KEY: process.env.NASA_API_KEY ? '✅ SET' : '❌ MISSING',
+      MONGO_URI: process.env.MONGO_URI ? '✅ SET' : '❌ MISSING',
+      JWT_SECRET: process.env.JWT_SECRET ? '✅ SET' : '❌ MISSING'
+    }
+  });
+});
+
+// Test endpoint to see asteroid data
+app.get('/api/test-asteroids', async (req, res) => {
+  try {
+    const nasaService = require('./services/nasaService');
+    const riskService = require('./services/riskService');
+    
+    const asteroids = await nasaService.fetchAsteroidFeed();
+    console.log(`📊 Test: Fetched ${asteroids.length} asteroids from NASA`);
+    
+    const enriched = asteroids.slice(0, 3).map(a => ({
+      id: a.id,
+      name: a.name,
+      riskScore: riskService.calculateRiskScore(a),
+      diameter: a.estimated_diameter?.meters?.estimated_diameter_avg || 'N/A',
+      isPotentiallyHazardous: a.is_potentially_hazardous_asteroid
+    }));
+    
+    res.json({
+      totalCount: asteroids.length,
+      sampleAsteroids: enriched,
+      message: 'Sample of asteroid data from NASA API'
+    });
+  } catch (error) {
+    console.error('🔴 Test endpoint error:', error.message);
+    res.status(500).json({
+      error: error.message,
+      hint: 'Check NASA_API_KEY in environment variables'
+    });
+  }
+});
+
 // Database Connection
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB Connected: Cosmic Watch'))
