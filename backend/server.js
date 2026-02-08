@@ -109,16 +109,39 @@ app.use('/api/asteroids', asteroidRoutes);
 
 // Socket.io Logic
 io.on('connection', (socket) => {
-  console.log('User Connected:', socket.id);
+  console.log('🟢 User Connected:', socket.id);
 
-  // User joins their own private room for personal notifications
-  socket.on('join_room', (userId) => {
-    socket.join(userId);
-    console.log(`User ${userId} joined their notification room`);
+  // User joins asteroid room for global chat
+  socket.on('join_room', (asteroidId) => {
+    socket.join(asteroidId);
+    console.log(`👤 Socket ${socket.id} joined room: ${asteroidId}`);
+    
+    // Notify others that user joined
+    io.to(asteroidId).emit('user_joined', {
+      message: `Pilot joined asteroid ${asteroidId} channel`,
+      timestamp: new Date().toISOString()
+    });
+  });
+
+  // Handle message receiving
+  socket.on('send_message', (messageData) => {
+    console.log(`📨 Message from ${socket.id} in room ${messageData.room}:`, messageData.message);
+    
+    // Broadcast to all users in that asteroid's room
+    io.to(messageData.room).emit('receive_message', {
+      ...messageData,
+      senderId: socket.id,
+      timestamp: new Date().toISOString()
+    });
+  });
+
+  // Error handling
+  socket.on('error', (error) => {
+    console.error(`🔴 Socket error for ${socket.id}:`, error);
   });
 
   socket.on('disconnect', () => {
-    console.log('User Disconnected');
+    console.log('🔴 User Disconnected:', socket.id);
   });
 });
 
