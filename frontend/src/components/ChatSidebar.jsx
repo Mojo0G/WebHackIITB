@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { Send, User, Radio } from 'lucide-react';
+import API_BASE_URL from '../api.config';
 
 const ChatSidebar = ({ asteroidId }) => {
   const [messages, setMessages] = useState([]);
@@ -9,7 +10,7 @@ const ChatSidebar = ({ asteroidId }) => {
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:5000');
+    const newSocket = io(API_BASE_URL);
     setSocket(newSocket);
     newSocket.emit('join_room', asteroidId);
     newSocket.on('receive_message', (data) => setMessages((prev) => [...prev, data]));
