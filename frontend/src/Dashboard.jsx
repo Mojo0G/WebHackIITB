@@ -28,10 +28,6 @@ const Dashboard = () => {
     maxRisk: 100
   });
 
-  // TODO: Add asteroid images when assets folder is created
-  const asteroidImages = [];
-  // const asteroidImages = [asteroidImg1, asteroidImg2, asteroidImg3, asteroidImg4, asteroidImg5, asteroidImg6];
-
   useEffect(() => {
     const fetchData = async () => {
       try {

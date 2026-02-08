@@ -2,9 +2,19 @@ import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext';
 import API_BASE_URL, { axiosInstance } from './api.config';
-import { ArrowLeft, Activity, Ruler, Globe2, Crosshair, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, Activity, Ruler, Globe2, Crosshair, AlertTriangle, Circle } from 'lucide-react';
 import EarthOrbit from './components/EarthOrbit';
 import ChatSidebar from './components/ChatSidebar';
+
+// Import asteroid images
+import asteroid1 from '/asteroid1.svg';
+import asteroid2 from '/asteroid2.svg';
+import asteroid3 from '/asteroid3.svg';
+import asteroid4 from '/asteroid4.svg';
+import asteroid5 from '/asteroid5.svg';
+import asteroid6 from '/asteroid6.svg';
+
+const asteroidImages = [asteroid1, asteroid2, asteroid3, asteroid4, asteroid5, asteroid6];
 
 const AsteroidDetail = () => {
   const { id } = useParams();
@@ -17,7 +27,14 @@ const AsteroidDetail = () => {
     const fetchDetail = async () => {
       try {
         const res = await axiosInstance.get('/api/asteroids/feed');
-        const found = res.data.find(a => a.id === id);
+        const asteroidIndex = res.data.findIndex(a => a.id === id);
+        const found = res.data[asteroidIndex];
+        
+        if (found) {
+          // Add image based on asteroid index
+          found.image = asteroidImages[asteroidIndex % 6];
+        }
+        
         setAsteroid(found);
         setLoading(false);
       } catch (err) {
@@ -55,8 +72,34 @@ const AsteroidDetail = () => {
         
         {/* LEFT COLUMN (2/3) */}
         <div className="lg:col-span-2 space-y-8">
-          {/* 3D Container */}
-          <EarthOrbit asteroidData={asteroid} />
+        {/* 3D Container + Image */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* 3D Visualization */}
+            <EarthOrbit asteroidData={asteroid} />
+            
+            {/* Asteroid Image */}
+            <div className="bg-cosmic-glass backdrop-blur-xl p-6 rounded-3xl border border-cosmic-border shadow-glass-lg relative overflow-hidden h-min">
+              <div className="absolute -right-10 -top-10 w-40 h-40 bg-neon-cyan/10 blur-[60px] rounded-full pointer-events-none"></div>
+              
+              <h3 className="text-sm font-rajdhani font-bold text-neon-cyan uppercase tracking-widest mb-4 relative z-10">Visual Representation</h3>
+              
+              <div className="relative z-10 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-800 to-black h-64 flex items-center justify-center border border-white/10">
+                {asteroid.image ? (
+                  <img 
+                    src={asteroid.image}
+                    alt={asteroid.name}
+                    className="w-full h-full object-cover opacity-80 hover:opacity-100 transition duration-500"
+                  />
+                ) : (
+                  <Circle 
+                    size={100} 
+                    className="text-slate-600 opacity-60"
+                    fill="currentColor"
+                  />
+                )}
+              </div>
+            </div>
+          </div>
 
           {/* Stats Panel */}
           <div className="bg-cosmic-glass backdrop-blur-xl p-8 rounded-3xl border border-cosmic-border shadow-glass-lg relative overflow-hidden">
