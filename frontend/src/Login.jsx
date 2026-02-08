@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { AuthContext } from './context/AuthContext';
-import { KeyRound, Mail, ShieldCheck } from 'lucide-react';
+import { KeyRound, Mail, ShieldCheck, AlertTriangle, ArrowRight } from 'lucide-react';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -13,12 +13,27 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     setLoading(true);
+    
     try {
+      console.log('🔐 Attempting login with email:', email);
       await login(email, password);
-      navigate('/'); 
+      console.log('✅ Login successful, redirecting...');
+      navigate('/');
     } catch (err) {
-      setError('Credentials Rejected by Mainframe.');
+      console.error('❌ Login error:', err);
+      
+      let errorMsg = 'Authentication failed';
+      if (err.response?.status === 401) {
+        errorMsg = 'Invalid email or password';
+      } else if (err.response?.data?.message) {
+        errorMsg = err.response.data.message;
+      } else if (err.message === 'Network Error') {
+        errorMsg = 'Network error - backend unreachable';
+      }
+      
+      setError(errorMsg);
     } finally {
       setLoading(false);
     }
@@ -45,7 +60,22 @@ const Login = () => {
           <p className="text-neon-blue/80 mt-2 font-rajdhani tracking-wide">Enter secure credentials to proceed.</p>
         </div>
         
-        {error && <div className="bg-hazard-critical/20 text-hazard-critical p-4 rounded-xl mb-6 text-center border border-hazard-critical/50 font-bold flex items-center justify-center gap-2"><AlertTriangle size={18} />{error}</div>}
+        {error && (
+          <div className="bg-hazard-critical/20 text-hazard-critical p-4 rounded-xl mb-6 border border-hazard-critical/50 font-bold">
+            <div className="flex items-center gap-2 mb-3">
+              <AlertTriangle size={18} />
+              <span>{error}</span>
+            </div>
+            <button
+              type="button"
+              onClick={() => navigate('/register')}
+              className="flex items-center gap-2 text-sm bg-hazard-critical/30 hover:bg-hazard-critical/50 px-3 py-2 rounded-lg transition w-full justify-center font-semibold"
+            >
+              Create Account Instead
+              <ArrowRight size={16} />
+            </button>
+          </div>
+        )}
         
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="group">

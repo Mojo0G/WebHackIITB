@@ -22,23 +22,35 @@ export const AuthProvider = ({ children }) => {
 
   // LOGIN FUNCTION
   const login = async (email, password) => {
-    const res = await axiosInstance.post('/api/auth/login', { email, password });
-    setToken(res.data.token);
-    setUser(res.data);
-    return res.data;
+    try {
+      const res = await axiosInstance.post('/api/auth/login', { email, password });
+      console.log('🔓 Login response:', res.data);
+      setToken(res.data.token);
+      setUser(res.data);
+      return res.data;
+    } catch (error) {
+      console.error('❌ Login failed:', error.response?.data || error.message);
+      throw error; // Re-throw so component can handle it
+    }
   };
 
   // REGISTER FUNCTION (New!)
   const register = async (name, email, password) => {
-    const res = await axiosInstance.post('/api/auth/register', { 
-      name, 
-      email, 
-      password 
-    });
-    // Automatically log them in after registering
-    setToken(res.data.token);
-    setUser(res.data);
-    return res.data;
+    try {
+      const res = await axiosInstance.post('/api/auth/register', { 
+        name, 
+        email, 
+        password 
+      });
+      console.log('✅ Registration response:', res.data);
+      // Automatically log them in after registering
+      setToken(res.data.token);
+      setUser(res.data);
+      return res.data;
+    } catch (error) {
+      console.error('❌ Registration failed:', error.response?.data || error.message);
+      throw error; // Re-throw so component can handle it
+    }
   };
 
   const logout = () => {
