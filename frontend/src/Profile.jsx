@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from './context/AuthContext';
 import { User, Shield, Activity, Trash2, Radar } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 

@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { AuthContext } from '../context/AuthContext';
+import { AuthContext } from './context/AuthContext';
 import { ArrowLeft, Activity, Ruler, Globe2, Crosshair, AlertTriangle } from 'lucide-react';
-import EarthOrbit from '../components/EarthOrbit';
-import ChatSidebar from '../components/ChatSidebar';
+import EarthOrbit from './components/EarthOrbit';
+import ChatSidebar from './components/ChatSidebar';
 
 const AsteroidDetail = () => {
   const { id } = useParams();

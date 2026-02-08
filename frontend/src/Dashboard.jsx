@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import AsteroidCard from '../components/AsteroidCard';
+import AsteroidCard from './components/AsteroidCard';
 import { SlidersHorizontal, Radar, AlertTriangle, X, Check } from 'lucide-react';
 
-// Import your downloaded images
-import asteroidImg1 from '../assets/astroid1.png';
-import asteroidImg2 from '../assets/astroid2.png';
-import asteroidImg3 from '../assets/astroid3.png';
-import asteroidImg4 from '../assets/astroid4.png';
-import asteroidImg5 from '../assets/astroid5.png';
-import asteroidImg6 from '../assets/astroid6.png';
+// TODO: Add asteroid images to public/assets folder
+// import asteroidImg1 from '../assets/astroid1.png';
+// import asteroidImg2 from '../assets/astroid2.png';
+// import asteroidImg3 from '../assets/astroid3.png';
+// import asteroidImg4 from '../assets/astroid4.png';
+// import asteroidImg5 from '../assets/astroid5.png';
+// import asteroidImg6 from '../assets/astroid6.png';
 
 const Dashboard = () => {
   const [asteroids, setAsteroids] = useState([]);
@@ -26,7 +26,9 @@ const Dashboard = () => {
     maxRisk: 100
   });
 
-  const asteroidImages = [asteroidImg1, asteroidImg2, asteroidImg3, asteroidImg4, asteroidImg5, asteroidImg6];
+  // TODO: Add asteroid images when assets folder is created
+  const asteroidImages = [];
+  // const asteroidImages = [asteroidImg1, asteroidImg2, asteroidImg3, asteroidImg4, asteroidImg5, asteroidImg6];
 
   useEffect(() => {
     const fetchData = async () => {
