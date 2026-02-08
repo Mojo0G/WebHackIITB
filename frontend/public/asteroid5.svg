@@ -1,0 +1,45 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="asteroid5-grad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#1a2a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#050a05;stop-opacity:1" />
+    </radialGradient>
+    <filter id="glow5">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="400" height="400" fill="url(#asteroid5-grad)"/>
+  
+  <!-- Greenish metallic asteroid -->
+  <g filter="url(#glow5)">
+    <path d="M 200 90 Q 270 130 290 200 Q 280 280 200 310 Q 120 280 110 200 Q 130 130 200 90" fill="#5a7a6a" stroke="#7a9a8a" stroke-width="2"/>
+    
+    <!-- Crater system -->
+    <circle cx="180" cy="150" r="28" fill="#3a5a4a" opacity="0.9"/>
+    <ellipse cx="230" cy="200" rx="32" ry="38" fill="#4a6a5a" opacity="0.8"/>
+    <circle cx="190" cy="270" r="25" fill="#3a5a4a" opacity="0.7"/>
+    
+    <!-- Metallic reflection -->
+    <ellipse cx="140" cy="170" rx="40" ry="45" fill="#aaccaa" opacity="0.25"/>
+    <ellipse cx="240" cy="260" rx="35" ry="40" fill="#9abaaa" opacity="0.2"/>
+    
+    <!-- Small surface details -->
+    <circle cx="200" cy="130" r="6" fill="#2a4a3a" opacity="0.8"/>
+    <circle cx="250" cy="190" r="5" fill="#2a4a3a" opacity="0.7"/>
+    <circle cx="160" cy="240" r="7" fill="#1a3a2a" opacity="0.9"/>
+    
+    <!-- Ridge/cliff -->
+    <path d="M 140 180 Q 160 200 140 220" stroke="#6a8a7a" stroke-width="2" fill="none" opacity="0.6"/>
+  </g>
+  
+  <!-- Green-tinted stars -->
+  <circle cx="50" cy="50" r="2" fill="#ccffaa" opacity="0.8"/>
+  <circle cx="350" cy="80" r="1.5" fill="#ccffaa" opacity="0.6"/>
+  <circle cx="80" cy="350" r="2" fill="#ccffaa" opacity="0.7"/>
+  <circle cx="330" cy="280" r="1.5" fill="#ccffaa" opacity="0.5"/>
+</svg>

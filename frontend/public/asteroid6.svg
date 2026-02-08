@@ -1,0 +1,45 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="asteroid6-grad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#2a2a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a05;stop-opacity:1" />
+    </radialGradient>
+    <filter id="glow6">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="400" height="400" fill="url(#asteroid6-grad)"/>
+  
+  <!-- Golden/yellow rocky asteroid -->
+  <g filter="url(#glow6)">
+    <ellipse cx="200" cy="200" rx="115" ry="130" fill="#8a7a5a" stroke="#aaa98a" stroke-width="2"/>
+    
+    <!-- Large crater formation -->
+    <path d="M 150 150 Q 180 120 220 130 Q 240 160 230 190 Q 200 220 160 210 Q 140 180 150 150" fill="#5a5a3a" opacity="0.8"/>
+    
+    <!-- Secondary craters -->
+    <circle cx="220" cy="250" r="30" fill="#6a5a4a" opacity="0.8"/>
+    <ellipse cx="140" cy="240" rx="25" ry="30" fill="#5a4a3a" opacity="0.7"/>
+    
+    <!-- Highlighted ridges -->
+    <ellipse cx="160" cy="140" rx="35" ry="40" fill="#bbaa8a" opacity="0.3"/>
+    <path d="M 240 160 Q 260 190 240 220" stroke="#9a8a6a" stroke-width="2" fill="none" opacity="0.5"/>
+    
+    <!-- Deep shadows -->
+    <circle cx="200" cy="160" r="8" fill="#3a3a1a" opacity="0.9"/>
+    <circle cx="170" cy="220" r="7" fill="#3a3a1a" opacity="0.8"/>
+    <circle cx="240" cy="200" r="6" fill="#2a2a0a" opacity="0.9"/>
+  </g>
+  
+  <!-- Golden stars -->
+  <circle cx="80" cy="80" r="2" fill="#ffdd99" opacity="0.9"/>
+  <circle cx="320" cy="100" r="1.5" fill="#ffdd99" opacity="0.7"/>
+  <circle cx="100" cy="310" r="2" fill="#ffdd99" opacity="0.8"/>
+  <circle cx="300" cy="300" r="1.5" fill="#ffdd99" opacity="0.6"/>
+  <circle cx="200" cy="50" r="1" fill="#ffdd99" opacity="0.5"/>
+</svg>

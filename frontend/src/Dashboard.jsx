@@ -3,13 +3,15 @@ import AsteroidCard from './components/AsteroidCard';
 import API_BASE_URL, { axiosInstance } from './api.config';
 import { SlidersHorizontal, Radar, AlertTriangle, X, Check } from 'lucide-react';
 
-// TODO: Add asteroid images to public/assets folder
-// import asteroidImg1 from '../assets/astroid1.png';
-// import asteroidImg2 from '../assets/astroid2.png';
-// import asteroidImg3 from '../assets/astroid3.png';
-// import asteroidImg4 from '../assets/astroid4.png';
-// import asteroidImg5 from '../assets/astroid5.png';
-// import asteroidImg6 from '../assets/astroid6.png';
+// Import asteroid images
+import asteroid1 from '/asteroid1.svg';
+import asteroid2 from '/asteroid2.svg';
+import asteroid3 from '/asteroid3.svg';
+import asteroid4 from '/asteroid4.svg';
+import asteroid5 from '/asteroid5.svg';
+import asteroid6 from '/asteroid6.svg';
+
+const asteroidImages = [asteroid1, asteroid2, asteroid3, asteroid4, asteroid5, asteroid6];
 
 const Dashboard = () => {
   const [asteroids, setAsteroids] = useState([]);

@@ -1,0 +1,38 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="asteroid2-grad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#0f1a2e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#050a12;stop-opacity:1" />
+    </radialGradient>
+    <filter id="glow2">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="400" height="400" fill="url(#asteroid2-grad)"/>
+  
+  <!-- Rocky angular asteroid -->
+  <g filter="url(#glow2)">
+    <polygon points="200,80 280,150 270,280 200,320 130,280 120,150" fill="#5a6a7a" stroke="#7a8a9a" stroke-width="2"/>
+    <polygon points="200,120 250,160 240,250 200,280 160,250 150,160" fill="#6a7a8a" stroke="#5a6a7a" stroke-width="1"/>
+    
+    <!-- Dark regions (craters) -->
+    <ellipse cx="200" cy="150" rx="25" ry="30" fill="#3a4a5a" opacity="0.9"/>
+    <ellipse cx="170" cy="200" rx="20" ry="25" fill="#4a5a6a" opacity="0.8"/>
+    <ellipse cx="230" cy="220" rx="22" ry="28" fill="#3a4a5a" opacity="0.8"/>
+    
+    <!-- Light highlights -->
+    <ellipse cx="150" cy="180" rx="30" ry="35" fill="#8a9aaa" opacity="0.3"/>
+    <path d="M 240 140 Q 250 160 240 180" stroke="#9aaaaa" stroke-width="2" fill="none" opacity="0.5"/>
+  </g>
+  
+  <!-- Stars -->
+  <circle cx="60" cy="60" r="2" fill="#ffffff" opacity="0.9"/>
+  <circle cx="340" cy="70" r="1.5" fill="#ffffff" opacity="0.7"/>
+  <circle cx="70" cy="340" r="2" fill="#ffffff" opacity="0.8"/>
+  <circle cx="330" cy="330" r="1.5" fill="#ffffff" opacity="0.6"/>
+</svg>

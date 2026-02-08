@@ -1,11 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Activity, Ruler, ArrowRight, Globe2 } from 'lucide-react';
+import { Activity, Ruler, ArrowRight, Globe2, Circle } from 'lucide-react';
 
 const AsteroidCard = ({ asteroid }) => {
   const navigate = useNavigate();
-  // Destructure the new 'image' property here
   const { name, id, riskColor, riskScore, estimated_diameter, image } = asteroid;
+  const [imageError, setImageError] = React.useState(false);
   
   const diameter = Math.round(
     (estimated_diameter.meters.estimated_diameter_min + 
@@ -25,7 +25,7 @@ const AsteroidCard = ({ asteroid }) => {
         transition-all duration-500 ease-out hover:-translate-y-2 hover:scale-[1.02]
       `}
     >
-      <div className="h-44 relative overflow-hidden bg-black/50">
+      <div className="h-44 relative overflow-hidden bg-gradient-to-br from-slate-800 to-black">
         <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/60 to-transparent z-10" />
         
         <div className="absolute top-3 right-3 z-20">
@@ -38,12 +38,23 @@ const AsteroidCard = ({ asteroid }) => {
            </div>
         </div>
 
-        {/* UPDATED: Uses the passed image prop */}
-       <img 
-  src={image} // <--- This will now use the image passed from Dashboard
-  alt="Asteroid" 
-  className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition duration-700"
-/>
+        {/* Asteroid Image with Fallback */}
+        {!imageError && image ? (
+          <img 
+            src={image}
+            alt="Asteroid"
+            onError={() => setImageError(true)}
+            className="w-full h-full object-cover opacity-70 group-hover:opacity-100 group-hover:scale-110 transition duration-700"
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-slate-700 to-slate-900">
+            <Circle 
+              size={80} 
+              className="text-slate-600 opacity-60"
+              fill="currentColor"
+            />
+          </div>
+        )}
       </div>
 
       <div className="p-5 relative z-20 -mt-6">

@@ -1,0 +1,42 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="asteroid4-grad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#2a1a1a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0f0505;stop-opacity:1" />
+    </radialGradient>
+    <filter id="glow4">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <rect width="400" height="400" fill="url(#asteroid4-grad)"/>
+  
+  <!-- Dark reddish asteroid (metallic) -->
+  <g filter="url(#glow4)">
+    <ellipse cx="200" cy="200" rx="110" ry="125" fill="#7a4a4a" stroke="#9a6a6a" stroke-width="2"/>
+    
+    <!-- Major impact craters -->
+    <ellipse cx="170" cy="170" rx="45" ry="50" fill="#4a2a2a" stroke="#6a3a3a" stroke-width="1"/>
+    <ellipse cx="230" cy="210" rx="35" ry="40" fill="#5a3a3a" stroke="#7a4a4a" stroke-width="1"/>
+    <circle cx="200" cy="270" r="30" fill="#3a1a1a" opacity="0.9"/>
+    
+    <!-- Metallic shine -->
+    <ellipse cx="130" cy="160" rx="40" ry="50" fill="#aaaaaa" opacity="0.2"/>
+    <path d="M 160 120 Q 180 100 200 110 Q 190 130 160 140" fill="#cccccc" opacity="0.15"/>
+    
+    <!-- Surface roughness -->
+    <circle cx="190" cy="190" r="5" fill="#2a1a1a" opacity="0.7"/>
+    <circle cx="220" cy="160" r="4" fill="#2a1a1a" opacity="0.6"/>
+    <circle cx="210" cy="240" r="6" fill="#1a1a1a" opacity="0.8"/>
+  </g>
+  
+  <!-- Stars with blue tint -->
+  <circle cx="70" cy="70" r="2" fill="#aaccff" opacity="0.9"/>
+  <circle cx="330" cy="60" r="1.5" fill="#aaccff" opacity="0.7"/>
+  <circle cx="60" cy="320" r="2" fill="#aaccff" opacity="0.8"/>
+  <circle cx="340" cy="310" r="1.5" fill="#aaccff" opacity="0.6"/>
+</svg>
