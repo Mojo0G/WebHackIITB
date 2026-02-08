@@ -26,10 +26,11 @@ services:
   # Frontend Service
   - type: web
     name: cosmic-watch-frontend
-    runtime: docker
+    runtime: node
     plan: free
     rootDir: frontend
-    dockerfilePath: Dockerfile
+    buildCommand: npm install --legacy-peer-deps && npm run build
+    startCommand: npm run preview
     envVars:
       - key: VITE_API_URL
         sync: false
