@@ -36,28 +36,96 @@ const Dashboard = () => {
         console.log('  Full URL:', `${API_BASE_URL}/api/asteroids/feed`);
         console.log('  Attempting to fetch asteroid data...');
         
-        const res = await axiosInstance.get('/api/asteroids/feed');
-        console.log('✅ Asteroids fetched:', res.data.length, 'asteroids');
-        console.log('Sample asteroid:', res.data[0]);
-        setAsteroids(res.data);
-        setLoading(false);
+        // Try to fetch from API
+        try {
+          const res = await axiosInstance.get('/api/asteroids/feed', { timeout: 10000 });
+          console.log('✅ Asteroids fetched from API:', res.data.length, 'asteroids');
+          console.log('Sample asteroid:', res.data[0]);
+          
+          // Cache the successful response
+          localStorage.setItem('asteroidsCache', JSON.stringify({
+            data: res.data,
+            timestamp: new Date().toISOString()
+          }));
+          
+          setAsteroids(res.data);
+          setError('');
+          setLoading(false);
+        } catch (apiErr) {
+          console.warn('⚠️  API call failed, trying cache:', apiErr.message);
+          
+          // Try to get from cache
+          const cached = localStorage.getItem('asteroidsCache');
+          if (cached) {
+            try {
+              const cachedData = JSON.parse(cached);
+              console.log('✅ Using cached asteroids:', cachedData.data.length, 'asteroids');
+              console.log('   Cache timestamp:', cachedData.timestamp);
+              setAsteroids(cachedData.data);
+              setError('📦 Using cached data (API unavailable)');
+              setLoading(false);
+              return;
+            } catch (cacheErr) {
+              console.error('❌ Cache parse error:', cacheErr);
+            }
+          }
+          
+          // No cache available, show error
+          console.error('❌ API Error Details:');
+          console.error('  Error Message:', apiErr.message);
+          console.error('  Error Code:', apiErr.code);
+          console.error('  Status Code:', apiErr.response?.status);
+          console.error('  Status Text:', apiErr.response?.statusText);
+          console.error('  Request URL:', apiErr.config?.url);
+          
+          setError('Unable to establish Deep Space Network uplink. Switching to local cache.');
+          setAsteroids([]);
+          setLoading(false);
+        }
       } catch (err) {
-        console.error('❌ API Error Details:');
-        console.error('  Error Message:', err.message);
-        console.error('  Error Code:', err.code);
-        console.error('  Status Code:', err.response?.status);
-        console.error('  Status Text:', err.response?.statusText);
-        console.error('  Response Data:', err.response?.data);
-        console.error('  Response Headers:', err.response?.headers);
-        console.error('  Request URL:', err.config?.url);
-        console.error('  Full Error:', err);
-        
-        setError('Unable to establish Deep Space Network uplink. Switching to local cache.');
+        console.error('❌ Unexpected Error:', err);
+        setError('System initialization failed');
         setLoading(false);
       }
     };
     fetchData();
   }, []);
+
+  // Refresh function to force API call and clear cache
+  const refreshAsteroids = async () => {
+    console.log('🔄 Refreshing asteroid data - clearing cache...');
+    localStorage.removeItem('asteroidsCache');
+    setLoading(true);
+    setError('');
+    
+    try {
+      const res = await axiosInstance.get('/api/asteroids/feed', { timeout: 10000 });
+      console.log('✅ Fresh asteroids fetched:', res.data.length, 'asteroids');
+      
+      // Cache the response
+      localStorage.setItem('asteroidsCache', JSON.stringify({
+        data: res.data,
+        timestamp: new Date().toISOString()
+      }));
+      
+      setAsteroids(res.data);
+      setError('');
+    } catch (err) {
+      console.error('❌ Refresh failed:', err.message);
+      const cached = localStorage.getItem('asteroidsCache');
+      if (cached) {
+        const cachedData = JSON.parse(cached);
+        console.log('Using fallback cache:', cachedData.data.length, 'asteroids');
+        setAsteroids(cachedData.data);
+        setError('📦 Using cached data (API unavailable)');
+      } else {
+        setError('Unable to refresh data. No cache available.');
+        setAsteroids([]);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // --- ADVANCED FILTER LOGIC ---
   const filteredAsteroids = asteroids.filter(ast => {
@@ -115,6 +183,15 @@ const Dashboard = () => {
             >THREATS ONLY</button>
             
             <div className="w-[1px] h-8 bg-white/10 mx-2"></div>
+            
+            <button 
+              onClick={refreshAsteroids}
+              disabled={loading}
+              title="Force refresh from API and clear cache"
+              className={`p-2.5 rounded-xl transition ${loading ? 'bg-gray-600 text-gray-400 cursor-not-allowed' : 'text-neon-cyan hover:text-white hover:bg-white/10'}`}
+            >
+              <Radar size={20} className={loading ? '' : ''} />
+            </button>
             
             <button 
               onClick={() => setShowFilters(!showFilters)}
